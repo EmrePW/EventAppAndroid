@@ -6,8 +6,6 @@ import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -41,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
         credentialManager = CredentialManager.create(this)
 
-        setContentView(R.layout.activity_login)
+        setContentView(binding.root)
 
         binding.goToRegisterButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
@@ -49,7 +47,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Sign in with email and password
-        binding.loginButton.setOnClickListener{
+        binding.loginButton.setOnClickListener{ view ->
+            Log.i("WHAT", "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
             val userEmail = binding.loginEmail.text.toString()
             val userPassword = binding.loginPassword.text.toString()
 

@@ -18,6 +18,7 @@
     <string name= "fillAllFields">Please fill out all the fields!</string>
     <string name="invalidEmail">Please enter a valid email</string>
     <string name="passwordsDontMatch">Passwords do not match!</string>
+    <string name="filters">Filters</string>
 
     <string name="loginRegister">Do not have an account? <u>Register here.</u></string>
 </resources>
