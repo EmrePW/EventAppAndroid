@@ -3,8 +3,10 @@ package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,6 +49,34 @@ class MainActivity : AppCompatActivity() {
             val result: MutableList<TestObject> = myTestObjects.filter(myPredicate).toMutableList()
             val result_adapter = TestObject_RecyclerViewAdapter(this@MainActivity, result)
             recyclerView.adapter = result_adapter
+        }
+
+        binding.filterButton.setOnClickListener{
+            val popup = PopupMenu(this, binding.filterButton )
+            popup.menuInflater.inflate(R.menu.filters_menu, popup.menu)
+
+            popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+                when(menuItem.itemId) {
+                    R.id.option_1 -> {
+                        Log.i("menu", "test1")
+                        true
+                    }
+                    R.id.option_2 -> {
+                        Log.i("menu", "test2")
+                        true
+                    }
+                    R.id.option_3 -> {
+                        Log.i("menu", "test3")
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+
+            }
+            // Show the popup menu.
+            popup.show()
         }
     }
     override fun onStart() {
