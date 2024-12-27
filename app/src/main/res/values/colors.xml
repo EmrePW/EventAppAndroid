@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bgColor">#283043</color>
+    <color name="textColorPrimary">#eff2ef</color>
+    <color name="textColorSecondary">#4DEFF2EF</color>
+    <color name="transparent">#00000000</color>
+    <color name="fieldError">#e52626</color>
 </resources>

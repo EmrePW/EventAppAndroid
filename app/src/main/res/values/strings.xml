@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="web_client_ID" translatable="false">1079978725212-a42ha36qd46b7g85b8tgjof09jm7vejr.apps.googleusercontent.com</string>
+
+    <string name="facebook_app_id" translatable="false">2021838118290592</string>
+    <string name="facebook_client_token" translatable="false">1e8864f46ab8d2c4a23e06634a7e1dc8</string>
+    <string name="app_label" translatable="false">SchoolMobileApp</string>
+    <string name="search_hint">Search Events</string>
+    <string name="login">Login to Your Account</string>
+    <string name="loginButton">Login</string>
+    <string name="register">Register<sup>+</sup></string>
+    <string name="registerButton">Register</string>
+    <string name="alt_signin_info">or sign in with</string>
+    <string name="forgotPassword">forgot password?</string>
+
+    <string name="passwordCriteria1">Password must contain at least 8 characters</string>
+    <string name="passwordCriteria2">Password must contain at least one uppercase letter</string>
+    <string name= "fillAllFields">Please fill out all the fields!</string>
+    <string name="invalidEmail">Please enter a valid email</string>
+    <string name="passwordsDontMatch">Passwords do not match!</string>
+
+    <string name="loginRegister">Do not have an account? <u>Register here.</u></string>
 </resources>
