@@ -6,4 +6,25 @@
     </style>
 
     <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
+
+
+    <style name="buttonPrimary">
+        <item name="android:background">@drawable/button_primary</item>
+        <item name="android:textColor">@color/bgColor</item>
+        <item name="android:paddingHorizontal">16dp</item>
+    </style>
+
+    <style name="buttonSecondary">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:paddingHorizontal">16dp</item>
+    </style>
+
+    <style name="buttonTertiary">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
