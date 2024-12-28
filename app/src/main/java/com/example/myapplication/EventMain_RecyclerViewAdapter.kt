@@ -8,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class EventMain_RecyclerViewAdapter(private val context: Context, private val items: MutableList<Event>) : RecyclerView.Adapter<EventMain_RecyclerViewAdapter.MyViewHolder>() {
+class EventMain_RecyclerViewAdapter(private val context: Context,
+                                    private val items: MutableList<Event>,
+                                    private val clickListener: (Int) -> Unit) : RecyclerView.Adapter<EventMain_RecyclerViewAdapter.MyViewHolder>() {
 
     // ViewHolder class to hold references to item views
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -64,6 +66,10 @@ class EventMain_RecyclerViewAdapter(private val context: Context, private val it
             holder.eventStatus.setText("Sales have ended!")
             holder.eventStartDate.setText("")
             holder.eventEndDate.setText("")
+        }
+
+        holder.itemView.setOnClickListener {
+            clickListener(position)
         }
     }
 

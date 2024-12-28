@@ -12,19 +12,17 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ActivityMainBinding
-import com.facebook.login.Login
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonBuilder
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -40,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        //startActivity(Intent(this, EventDetails::class.java))
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         recyclerView = binding.myRecycler
@@ -159,7 +159,12 @@ class MainActivity : AppCompatActivity() {
                         }
                         val res: List<Event> = json.decodeFromString<EventMain>(response.body!!.string())._embedded.events
                         runOnUiThread {
-                            adapter = EventMain_RecyclerViewAdapter(this@MainActivity, res.toMutableList())
+                            adapter = EventMain_RecyclerViewAdapter(this@MainActivity, res.toMutableList()){
+                                position ->
+                                val intent = Intent(this@MainActivity, EventDetailsActivity::class.java)
+                                intent.putExtra("event", json.encodeToString(Event.serializer(), res.get(position)))
+                                startActivity(intent)
+                            }
                             recyclerView.adapter = adapter
                             recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
                             mainEventsObject.addAll(res)

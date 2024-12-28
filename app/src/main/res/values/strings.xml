@@ -27,4 +27,7 @@
     <string name="filter_non_ticket">Nonticket</string>
 
     <string name="loginRegister">Do not have an account? <u>Register here.</u></string>
+
+    <string name="addRemainder">Set a reminder</string>
+    <string name="joinEvent">Join this event</string>
 </resources>
