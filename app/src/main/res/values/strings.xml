@@ -19,6 +19,12 @@
     <string name="invalidEmail">Please enter a valid email</string>
     <string name="passwordsDontMatch">Passwords do not match!</string>
     <string name="filters">Filters</string>
+    <string name="filter_misc">Miscellaneous</string>
+    <string name="filter_sports">Sports</string>
+    <string name="filter_music">Music</string>
+    <string name="filter_artsntheatre">Arts and Theatre</string>
+    <string name="filter_film">Films</string>
+    <string name="filter_non_ticket">Nonticket</string>
 
     <string name="loginRegister">Do not have an account? <u>Register here.</u></string>
 </resources>

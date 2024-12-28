@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -12,7 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.facebook.login.Login
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonBuilder
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -24,49 +29,74 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val ticketMasterAPIKey: String = "NEt1CpT1sA2eQDgr5a0OXJA7nWxNc9M4"
-    private val baseTicketMasterUrl: String = "https://app.ticketmaster.com/discovery/v2/"
-    private val testUrl: String = "https://jsonplaceholder.typicode.com/posts"
-    //private lateinit var mainEventsObject: EventType
+    private val baseTicketMasterUrl: String = "https://app.ticketmaster.com/discovery/v2/events?apikey=${ticketMasterAPIKey}"
+    //private val testUrl: String = "https://jsonplaceholder.typicode.com/posts"
+    //private lateinit var myTestObjects: MutableList<TestObject>
+    private lateinit var mainEventsObject: MutableList<Event>
     private lateinit var recyclerView: RecyclerView
-    private lateinit var myTestObjects: MutableList<TestObject>
+    private lateinit var adapter: EventMain_RecyclerViewAdapter
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         recyclerView = binding.myRecycler
-        myTestObjects = mutableListOf()
-
-        //startActivity(Intent(this, LoginActivity::class.java))
+        mainEventsObject = mutableListOf()
+        auth = Firebase.auth
 
         setContentView(binding.root)
 
-        fetchItems(testUrl)
+        fetchItems("$baseTicketMasterUrl&countryCode=TR")
 
         binding.searchEditText.addTextChangedListener{ query ->
-            Log.i("Search", myTestObjects[0].title)
-            val myPredicate: (TestObject) -> Boolean = { obj -> query.toString().lowercase() in obj.title.lowercase() }
-            val result: MutableList<TestObject> = myTestObjects.filter(myPredicate).toMutableList()
-            val result_adapter = TestObject_RecyclerViewAdapter(this@MainActivity, result)
-            recyclerView.adapter = result_adapter
+            val myPredicate: (Event) -> Boolean = { obj -> query.toString().lowercase() in obj.name.lowercase() }
+            val result: List<Event> = mainEventsObject.filter(myPredicate).toMutableList()
+            adapter.updateData(result)
         }
 
         binding.filterButton.setOnClickListener{
             val popup = PopupMenu(this, binding.filterButton )
             popup.menuInflater.inflate(R.menu.filters_menu, popup.menu)
 
+            // TODO: change segment names to ids
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                 when(menuItem.itemId) {
+                    // Music
                     R.id.option_1 -> {
-                        Log.i("menu", "test1")
+                        adapter.updateData(mainEventsObject.filter { obj -> obj.classifications[0].segment.name.lowercase() == "music" })
+                        binding.removeFilterButton.visibility = View.VISIBLE
                         true
                     }
+                    // Sports
                     R.id.option_2 -> {
-                        Log.i("menu", "test2")
+                        adapter.updateData(mainEventsObject.filter { obj -> obj.classifications[0].segment.name.lowercase() == "sports" })
+                        binding.removeFilterButton.visibility = View.VISIBLE
                         true
                     }
+                    // Arts & Theatre
                     R.id.option_3 -> {
-                        Log.i("menu", "test3")
+                        adapter.updateData(mainEventsObject.filter { obj -> obj.classifications[0].segment.name.lowercase() == "arts & theatre" })
+                        binding.removeFilterButton.visibility = View.VISIBLE
+                        true
+                    }
+                    // Film
+                    R.id.option_4 -> {
+                        adapter.updateData(mainEventsObject.filter { obj -> obj.classifications[0].segment.name.lowercase() == "film" })
+                        binding.removeFilterButton.visibility = View.VISIBLE
+                        true
+                    }
+                    // Non-ticket
+                    R.id.option_5 -> {
+                        adapter.updateData(mainEventsObject.filter { obj -> obj.classifications[0].segment.name.lowercase() == "nonticket" })
+                        binding.removeFilterButton.visibility = View.VISIBLE
+                        true
+                    }
+                    // Miscellaneous
+                    R.id.option_6 -> {
+                        adapter.updateData(mainEventsObject.filter { obj -> obj.classifications[0].segment.name.lowercase() == "miscellaneous" })
+                        binding.removeFilterButton.visibility = View.VISIBLE
                         true
                     }
                     else -> {
@@ -78,17 +108,38 @@ class MainActivity : AppCompatActivity() {
             // Show the popup menu.
             popup.show()
         }
+
+        // TODO : reduce opacity of outline or reduce transparency by 50%
+        binding.removeFilterButton.setOnClickListener {
+            adapter.updateData(mainEventsObject)
+            binding.removeFilterButton.visibility = View.INVISIBLE
+        }
     }
     override fun onStart() {
         super.onStart()
+        Firebase.auth.signOut()
+
+        // TODO : fix photo states
+        if(auth.currentUser == null) {
+            binding.loginProfileButton.setImageResource(R.drawable.logindrawable)
+            binding.loginProfileButton.setOnClickListener{
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java ))
+            }
+        }
+        else {
+            binding.loginProfileButton.setImageResource(R.drawable.profile_photo)
+            binding.loginProfileButton.setOnClickListener {
+                // open menu
+
+            }
+
+        Log.i("AUTH", auth.currentUser!!.uid)
+        }
 
     }
-    override fun onResume() {
-        super.onResume()
 
-    }
     private fun fetchItems(url: String){
-        var myList: MutableList<TestObject>
+        var myList: MutableList<EventMain>
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
@@ -103,12 +154,15 @@ class MainActivity : AppCompatActivity() {
                 Log.i("APITEST", "Response received!")
                 response.use {
                     if (response.isSuccessful) {
-                        myList = Json.decodeFromString(response.body!!.string())
+                        val json = Json{
+                            ignoreUnknownKeys = true
+                        }
+                        val res: List<Event> = json.decodeFromString<EventMain>(response.body!!.string())._embedded.events
                         runOnUiThread {
-                            val adapter = TestObject_RecyclerViewAdapter(this@MainActivity, myList)
+                            adapter = EventMain_RecyclerViewAdapter(this@MainActivity, res.toMutableList())
                             recyclerView.adapter = adapter
                             recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                            myTestObjects.addAll(myList)
+                            mainEventsObject.addAll(res)
                         }
                     }
                 }

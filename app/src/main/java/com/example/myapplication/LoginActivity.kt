@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("f", "signInWithEmail:success")
-                        val user = auth.currentUser
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         // do stuff with user
                     } else {
                         // If sign in fails, display a message to the user.
@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d("FacebookLoginSuccess", "signInWithCredential:success")
-                                    val user = auth.currentUser
+                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w("FacebookLoginFail", "signInWithCredential:failure", task.exception)
@@ -194,7 +194,7 @@ class LoginActivity : AppCompatActivity() {
                                         if (task.isSuccessful) {
                                             // Sign in success, update UI with the signed-in user's information
                                             Log.d("GoogleFirebase", "signInWithCredential:success")
-                                            val user = auth.currentUser
+                                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
 
                                         } else {
                                             // If sign in fails, display a message to the user.
