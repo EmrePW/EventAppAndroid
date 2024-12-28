@@ -15,7 +15,7 @@
 
     <string name="passwordCriteria1">Password must contain at least 8 characters</string>
     <string name="passwordCriteria2">Password must contain at least one uppercase letter</string>
-    <string name= "fillAllFields">Please fill out all the fields!</string>
+    <string name="fillAllFields">Please fill out all the fields!</string>
     <string name="invalidEmail">Please enter a valid email</string>
     <string name="passwordsDontMatch">Passwords do not match!</string>
     <string name="filters">Filters</string>
