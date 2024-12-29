@@ -117,9 +117,6 @@ class EventDetailsActivity : AppCompatActivity() {
             db.collection("users").document(user.uid).update("favouriteEvents", userData.favEvents)
         }
 
-        // TODO change button texts based on state
-
-        // TODO : setReminder
         binding.button5.setOnClickListener {
             val setReminerButton: MaterialButton = findViewById<MaterialButton>(R.id.button5)
 
@@ -146,7 +143,6 @@ class EventDetailsActivity : AppCompatActivity() {
             createReminderOnCalendar()
         }
 
-        // TODO : Join event
         binding.button6.setOnClickListener{
             val joinEventButton: MaterialButton = findViewById<MaterialButton>(R.id.button6)
             if (userData.joinedEvents.contains(thisEvent.id)) {
