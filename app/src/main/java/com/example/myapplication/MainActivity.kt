@@ -15,6 +15,8 @@ import com.example.myapplication.databinding.ActivityMainBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.Call
@@ -23,6 +25,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+
+@Serializable
+data class ratedEvent(
+    val eventid: String,
+    val body: String?,
+    val rating: Int = 0
+)
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -34,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: EventMain_RecyclerViewAdapter
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i("loginTest", "mainActivity onCreate")
@@ -46,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = binding.myRecycler
         mainEventsObject = mutableListOf()
         auth = Firebase.auth
+        db = Firebase.firestore
 
         setContentView(binding.root)
 
@@ -120,16 +131,16 @@ class MainActivity : AppCompatActivity() {
         Log.i("loginTest", "mainActivity onStart")
         super.onStart()
         // TODO : fix Login alignment
-        if(auth.currentUser == null) {
+        if (auth.currentUser == null) {
             Log.i("loginTest", "user is null")
-            binding.loginProfileButton.setImageResource(R.drawable.logindrawable)
-            binding.loginProfileButton.setOnClickListener{
-                startActivity(Intent(this@MainActivity, LoginActivity::class.java ))
+            binding.loginProfileButton.setImageResource(R.drawable.updatedlogin)
+            binding.loginProfileButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             }
-        }
-        else {
-            val user = auth.currentUser
-            Log.i("loginTest", "mainActivity onStart ${user!!.uid}")
+        } else {
+            val user = auth.currentUser!!
+            checkUser(user.uid)
+            Log.i("loginTest", "mainActivity onStart ${user.uid}")
             binding.loginProfileButton.setImageResource(R.drawable.profile_photo)
             binding.loginProfileButton.setOnClickListener {
                 Log.i("loginTest", "click!")
@@ -137,16 +148,18 @@ class MainActivity : AppCompatActivity() {
                 popup.menuInflater.inflate(R.menu.profile_menu, popup.menu)
 
                 popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-                    when(menuItem.itemId) {
+                    when (menuItem.itemId) {
                         R.id.settings -> {
                             startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                             true
                         }
+
                         R.id.logout -> {
                             Firebase.auth.signOut()
                             startActivity(Intent(this@MainActivity, MainActivity::class.java))
                             true
                         }
+
                         else -> {
                             false
                         }
@@ -156,27 +169,40 @@ class MainActivity : AppCompatActivity() {
                 popup.show()
             }
         }
-
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        Log.i("loginTest", "mainActivity onRestart")
-    }
+    private fun checkUser(uid: String) {
+        val userDocRef = db.collection("users").document(uid)
 
-    override fun onResume() {
-        super.onResume()
-        Log.i("loginTest", "mainActivity onResume")
-    }
+        userDocRef.get()
+            .addOnSuccessListener { document ->
+                if(!document.exists()){
+                    val userData = hashMapOf(
+                        "favouriteEvents" to emptyList<String>(),
+                        "ratedEvents" to emptyList<ratedEvent>(),
+                        "joinedEvents" to emptyList<String>(),
+                        "eventPreferences" to "",
+                        "notificationPreference" to true,
+                        "notifyOnUpcomingEvent" to true,
+                        "notifyOnNewEvent" to true
+                    )
 
-    override fun onPause() {
-        super.onPause()
-        Log.i("loginTest", "mainActivity onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("loginTest", "mainActivity onStop")
+                    userDocRef.set(userData)
+                        .addOnSuccessListener {
+                            Log.i("Firestore", "User saved successful")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Firestore", "Kullanıcı verisi kaydedilirken hata oluştu: ${e.message}")
+                            Firebase.auth.signOut()
+                        }
+                }
+                else{
+                    Log.i("Firestore", "User data is already exists")
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Firestore'dan veri alınırken hata oluştu: ${e.message}")
+            }
     }
 
     private fun fetchItems(url: String){
