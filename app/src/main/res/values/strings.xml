@@ -28,6 +28,12 @@
 
     <string name="loginRegister">Do not have an account? <u>Register here.</u></string>
 
-    <string name="addRemainder">Set a reminder</string>
+    <string name="addReminder">Set a reminder</string>
+    <string name="removeReminder">Remove the reminder</string>
     <string name="joinEvent">Join this event</string>
+    <string name="leaveEvent">Fuck I am too busy</string>
+
+    <string name="channel_name">MyChannel</string>
+    <string name="channel_description"></string>
+    <string name="channelId">MyNotChannel</string>
 </resources>

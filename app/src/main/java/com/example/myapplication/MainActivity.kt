@@ -1,6 +1,11 @@
 package com.example.myapplication
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -8,6 +13,8 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.Callback
@@ -26,12 +32,6 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-@Serializable
-data class ratedEvent(
-    val eventid: String,
-    val body: String?,
-    val rating: Int = 0
-)
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var myTestObjects: MutableList<TestObject>
     private lateinit var mainEventsObject: MutableList<Event>
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: EventMain_RecyclerViewAdapter
+    private var adapter: EventMain_RecyclerViewAdapter = EventMain_RecyclerViewAdapter(this@MainActivity, mutableListOf()){pos -> pos}
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         mainEventsObject = mutableListOf()
         auth = Firebase.auth
         db = Firebase.firestore
+        createNotificationChannel()
 
         setContentView(binding.root)
 
@@ -172,6 +173,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkUser(uid: String) {
+
         val userDocRef = db.collection("users").document(uid)
 
         userDocRef.get()
@@ -240,5 +242,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(getString(R.string.channelId), name, importance).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system.
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
