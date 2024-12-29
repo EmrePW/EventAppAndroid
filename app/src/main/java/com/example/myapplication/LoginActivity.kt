@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var  credentialManager: CredentialManager
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("loginTest", "LoginActivity onCreate!")
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
@@ -226,9 +227,19 @@ class LoginActivity : AppCompatActivity() {
         Log.e("GoogleFail", exception.message.toString())
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
+    override fun onPause() {
+        super.onPause()
+        Log.i("loginTest", "loginActivity onPause")
     }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("loginTest", "loginActivity onStop")
+    }
+
+    //override fun onStart() {
+       // super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        //val currentUser = auth.currentUser
+   // }
 }

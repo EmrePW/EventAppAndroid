@@ -109,7 +109,7 @@ data class Self (
 
 @Serializable
 data class UpcomingEvents (
-    @SerialName("wts-tr") val wts_tr: Long,
+    @SerialName("wts-tr") val wts_tr: Long = 0,
     val _total: Long,
     val _filtered: Long
 )

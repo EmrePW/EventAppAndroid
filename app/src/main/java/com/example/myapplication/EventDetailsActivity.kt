@@ -48,6 +48,11 @@ class EventDetailsActivity : AppCompatActivity() {
         binding.venueCountry.setText(thisEvent._embedded.venues[0].country.name)
         binding.venueAdress.setText(thisEvent._embedded.venues[0].address.line1)
 
+        // TODO : implement favourites logic, if already liked show the filled version
+        binding.iconButton.setOnClickListener{
+
+        }
+
 
 
 

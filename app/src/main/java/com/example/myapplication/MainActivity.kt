@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("loginTest", "mainActivity onCreate")
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        fetchItems("$baseTicketMasterUrl&countryCode=TR")
+        fetchItems("$baseTicketMasterUrl&countryCode=TR&city=Erzurum")
 
         binding.searchEditText.addTextChangedListener{ query ->
             val myPredicate: (Event) -> Boolean = { obj -> query.toString().lowercase() in obj.name.lowercase() }
@@ -116,26 +117,66 @@ class MainActivity : AppCompatActivity() {
         }
     }
     override fun onStart() {
+        Log.i("loginTest", "mainActivity onStart")
         super.onStart()
-        Firebase.auth.signOut()
-
-        // TODO : fix photo states
+        // TODO : fix Login alignment
         if(auth.currentUser == null) {
+            Log.i("loginTest", "user is null")
             binding.loginProfileButton.setImageResource(R.drawable.logindrawable)
             binding.loginProfileButton.setOnClickListener{
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java ))
             }
         }
         else {
+            val user = auth.currentUser
+            Log.i("loginTest", "mainActivity onStart ${user!!.uid}")
             binding.loginProfileButton.setImageResource(R.drawable.profile_photo)
             binding.loginProfileButton.setOnClickListener {
-                // open menu
+                Log.i("loginTest", "click!")
+                val popup = PopupMenu(this, binding.loginProfileButton)
+                popup.menuInflater.inflate(R.menu.profile_menu, popup.menu)
 
+                popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+                    when(menuItem.itemId) {
+                        R.id.settings -> {
+                            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+                            true
+                        }
+                        R.id.logout -> {
+                            Firebase.auth.signOut()
+                            startActivity(Intent(this@MainActivity, MainActivity::class.java))
+                            true
+                        }
+                        else -> {
+                            false
+                        }
+
+                    }
+                }
+                popup.show()
             }
-
-        Log.i("AUTH", auth.currentUser!!.uid)
         }
 
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.i("loginTest", "mainActivity onRestart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("loginTest", "mainActivity onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("loginTest", "mainActivity onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("loginTest", "mainActivity onStop")
     }
 
     private fun fetchItems(url: String){
