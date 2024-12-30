@@ -158,16 +158,6 @@ class EventDetailsActivity : AppCompatActivity() {
     }
 
     private fun createReminderOnCalendar() {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.READ_CALENDAR),
-//                102
-//            )
-//        }
-//        else {
-//            getCalendarIds(this@EventDetailsActivity)
-//        }
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
@@ -215,35 +205,4 @@ class EventDetailsActivity : AppCompatActivity() {
 
 
     }
-//    fun getCalendarIds(context: Context): List<Pair<Long, String>> {
-//
-//        val calendarList = mutableListOf<Pair<Long, String>>()
-//        val projection = arrayOf(
-//            CalendarContract.Calendars._ID,        // Column for the calendar ID
-//            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME // Column for the calendar name
-//        )
-//
-//        val cursor = context.contentResolver.query(
-//            CalendarContract.Calendars.CONTENT_URI,
-//            projection,
-//            null, // Selection (optional filter)
-//            null, // Selection arguments (optional filter arguments)
-//            null // Sort order
-//        )
-//
-//        cursor?.use {
-//            while (it.moveToNext()) {
-//                val id = it.getLong(it.getColumnIndexOrThrow(CalendarContract.Calendars._ID))
-//                val name = it.getString(it.getColumnIndexOrThrow(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME))
-//                calendarList.add(Pair(id, name))
-//            }
-//        }
-//
-//        // Log calendar IDs and names (for debugging)
-//        calendarList.forEach { (id, name) ->
-//            Log.d("CalendarInfo", "ID: $id, Name: $name")
-//        }
-//
-//        return calendarList
-//    }
 }

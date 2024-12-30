@@ -36,4 +36,15 @@
     <string name="channel_name">MyChannel</string>
     <string name="channel_description"></string>
     <string name="channelId">MyNotChannel</string>
+
+    <string name="notificationSettings">Notifications</string>
+    <string name="profileSettings">Profile</string>
+    <string name="eventPreferences">Event Preferences</string>
+    <string name="myFavs">My Liked Events</string>
+
+    <string name="changeEmailSetting">Change your info and press the submit button beside it</string>
+
+    <string name="wantsNotifiction">I want to receive notifications</string>
+    <string name="upcomingEventNotification">I want to receive notifications about upcoming events</string>
+    <string name="newEventsNotifications">I want to receive a update when there is new event in my interests</string>
 </resources>

@@ -9,7 +9,7 @@
         android:id="@+id/card"
         style="?attr/materialCardViewFilledStyle"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
