@@ -14,8 +14,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.example.myapplication.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.model.MapColorScheme
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
+import com.google.android.gms.maps.model.Marker
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -53,20 +60,30 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val TRABZON = LatLng(41.0027, 39.7168)
         mMap.setMapColorScheme(MapColorScheme.FOLLOW_SYSTEM)
         // zooms between 0f and 20f
-        mMap.addMarker(
+        val bursa: Marker? = mMap.addMarker(
             MarkerOptions()
                 .position(BURSA)
-                .title("Sydney")
-                .snippet("I was here")
+                .title("Bursa")
+                .snippet("Hello")
         )
-        mMap.addMarker(
-            MarkerOptions()
-                .position(TRABZON)
-                .title("Trabzon")
-                .snippet("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
-        )
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(TRABZON, 8f))
+
+//         val trabzon: Marker? = mMap.addMarker(
+//            MarkerOptions()
+//                .position(TRABZON)
+//                .title("Trabzon")
+//
+//        )
+
+        mMap.setInfoWindowAdapter(CustomInfoWindowAdapter(this@MapsActivity))
+        bursa?.tag = EventInfo("Arts", "20.10.2024", "20:00:00")
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BURSA, 8f))
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+
+        mMap.setOnMarkerClickListener { marker ->
+            marker.showInfoWindow()
+            true
+        }
+
     }
 
     private fun enableMyLocation() {
@@ -85,4 +102,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             201
         )
     }
+
+    class CustomInfoWindowAdapter(private val context: Context) : InfoWindowAdapter {
+        override fun getInfoContents(p0: Marker): View? {
+            return null
+        }
+
+        override fun getInfoWindow(p0: Marker): View? {
+            val view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null)
+            val title = view.findViewById<TextView>(R.id.eventTitleViewMap)
+            val segment = view.findViewById<TextView>(R.id.eventSegmentGenreMap)
+            val sales = view.findViewById<TextView>(R.id.eventSalesMap)
+            val start = view.findViewById<TextView>(R.id.eventStartMap)
+
+            val placeInfo = p0.tag as EventInfo
+
+
+            title.text = p0.title ?: "Default"
+            segment.text = placeInfo.segmentGenre ?: "Default"
+            sales.text = placeInfo.sales ?: "Default"
+            start.text = placeInfo.start ?: "Default"
+
+            return view
+        }
+
+    }
+
+    data class EventInfo(
+        val segmentGenre: String,
+        val sales: String,
+        val start: String
+    )
 }
