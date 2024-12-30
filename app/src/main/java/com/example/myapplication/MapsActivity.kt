@@ -67,13 +67,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .snippet("Hello")
         )
 
-//         val trabzon: Marker? = mMap.addMarker(
-//            MarkerOptions()
-//                .position(TRABZON)
-//                .title("Trabzon")
-//
-//        )
-
         mMap.setInfoWindowAdapter(CustomInfoWindowAdapter(this@MapsActivity))
         bursa?.tag = EventInfo("Arts", "20.10.2024", "20:00:00")
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BURSA, 8f))

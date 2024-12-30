@@ -23,11 +23,11 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.TimeZone
 
 
@@ -73,6 +73,15 @@ class EventDetailsActivity : AppCompatActivity() {
         binding.venueCity.setText(thisEvent._embedded.venues[0].city.name)
         binding.venueCountry.setText(thisEvent._embedded.venues[0].country.name)
         binding.venueAdress.setText(thisEvent._embedded.venues[0].address.line1)
+
+        binding.extendedFab.setOnClickListener{
+            val intent = Intent(this, NavigationActivity::class.java)
+            intent.putExtra("coords",
+                                    Json.encodeToString(waypoint.serializer(),
+                                        waypoint(thisEvent._embedded.venues[0].location.latitude.toDouble(),
+                                            thisEvent._embedded.venues[0].location.longitude.toDouble())))
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -200,9 +209,5 @@ class EventDetailsActivity : AppCompatActivity() {
                 Log.e("CalendarInsert", "Failed to insert event")
             }
         }
-
-
-
-
     }
 }

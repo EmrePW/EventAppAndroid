@@ -188,4 +188,6 @@ data class Page (
     val number: Long
 )
 
-
+@Serializable
+data class waypoint(val lat: Double,
+                    val long: Double)

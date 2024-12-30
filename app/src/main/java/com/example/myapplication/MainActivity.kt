@@ -50,8 +50,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        startActivity(Intent(this, MapsActivity::class.java))
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         recyclerView = binding.myRecycler
         mainEventsObject = mutableListOf()

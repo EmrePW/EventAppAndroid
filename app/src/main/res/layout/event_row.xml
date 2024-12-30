@@ -65,6 +65,7 @@
                 android:id="@+id/eventIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toTopOf="@+id/eventTitle"
                 app:layout_constraintEnd_toEndOf="parent"
