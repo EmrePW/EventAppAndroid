@@ -3,7 +3,6 @@ package com.example.myapplication
 import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -23,7 +22,6 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -139,8 +137,6 @@ class EventDetailsActivity : AppCompatActivity() {
         }
 
         binding.button5.setOnClickListener {
-            val setReminerButton: MaterialButton = findViewById<MaterialButton>(R.id.button5)
-
             val builder = NotificationCompat.Builder(this, getString(R.string.channelId))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("textTitle")

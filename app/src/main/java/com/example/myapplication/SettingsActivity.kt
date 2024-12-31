@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginBottom
 import com.example.myapplication.databinding.ActivitySettingsBinding
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.Firebase

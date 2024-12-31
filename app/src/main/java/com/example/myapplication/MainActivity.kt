@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val intent = Intent(this, MapsActivity::class.java)
-            var eventString: String = "["
+            var eventString = "["
 
             for (event in mainEventsObject) {
                 val indiviualEventString: String = Json.encodeToString(Event.serializer(), event)
@@ -221,7 +221,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchItems(url: String){
-        var myList: MutableList<EventMain>
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
