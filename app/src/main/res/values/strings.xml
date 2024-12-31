@@ -46,6 +46,6 @@
 
     <string name="wantsNotifiction">I want to receive notifications</string>
     <string name="upcomingEventNotification">I want to receive notifications about upcoming events</string>
-    <string name="newEventsNotifications">I want to receive a update when there is new event in my interests</string>
+    <string name="newEventsNotifications">I want to receive an update when there is new event in my interests</string>
     <string name="title_activity_maps">MapsActivity</string>
 </resources>

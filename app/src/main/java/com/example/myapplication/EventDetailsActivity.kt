@@ -30,9 +30,6 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
-// TODO: Navigate when only logged in done
-// TODO: fix join event ui update
-// TODO: bottom navbar feature only when logged in else send to login
 class EventDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventDetailsBinding
     private lateinit var auth: FirebaseAuth
@@ -107,7 +104,6 @@ class EventDetailsActivity : AppCompatActivity() {
                 .addOnSuccessListener { document ->
                     if(document != null) {
                         userData = document.toObject<User>()!!
-                        Log.i("details1234", "user data before $userData")
                     }
                     else {
                         Log.e("FireStore", "no Such document for ${user.uid}")
@@ -128,8 +124,6 @@ class EventDetailsActivity : AppCompatActivity() {
         else {
             return
         }
-        Log.i("details1234", "user data after : ${userData}")
-
         binding.iconButton.setOnClickListener{
             val favButton : MaterialButton = findViewById(R.id.iconButton)
             if (userData.favouriteEvents.contains(thisEvent.id)){

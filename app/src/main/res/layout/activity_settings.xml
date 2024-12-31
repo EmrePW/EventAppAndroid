@@ -74,6 +74,7 @@
 
                         <EditText
                             android:id="@+id/changeEmailEditText"
+                            style="@android:style/Widget.DeviceDefault.EditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -105,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:text="Button"
+                            android:text="Save"
                             app:layout_constraintBottom_toBottomOf="@+id/changeEmailEditText"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
@@ -117,12 +118,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
-                            android:layout_marginBottom="32dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="16dp"
                             android:ems="10"
                             android:hint="Password"
                             android:inputType="text"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintBottom_toTopOf="@+id/errorContainer"
                             app:layout_constraintEnd_toStartOf="@+id/button3"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -135,12 +136,23 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:text="Button"
+                            android:text="Save"
                             app:layout_constraintBottom_toBottomOf="@+id/editTextText"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/editTextText"
                             app:layout_constraintTop_toTopOf="@+id/editTextText" />
+
+                        <LinearLayout
+                            android:id="@+id/errorContainer"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="32dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"></LinearLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -222,6 +234,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/materialSwitch" />
 
                         <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/materialSwitch3"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -232,7 +245,20 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/materialSwitch2" />
+                            app:layout_constraintTop_toBottomOf="@+id/materialSwitch2"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                        <Button
+                            android:id="@+id/button7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:text="Save"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/materialSwitch3" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -289,7 +315,7 @@
 
                         <CheckBox
                             android:id="@+id/checkBox2"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -303,7 +329,7 @@
 
                         <CheckBox
                             android:id="@+id/checkBox"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -315,7 +341,7 @@
 
                         <CheckBox
                             android:id="@+id/checkBox3"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -327,7 +353,7 @@
 
                         <CheckBox
                             android:id="@+id/checkBox4"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -339,7 +365,7 @@
 
                         <CheckBox
                             android:id="@+id/checkBox5"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -351,7 +377,7 @@
 
                         <CheckBox
                             android:id="@+id/checkBox6"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -415,13 +441,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        android:layout_marginBottom="32dp"
                         android:text="@string/myFavs"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/imageView6"
                         app:layout_constraintStart_toStartOf="@+id/imageView6"
                         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+                    <LinearLayout
+                        android:id="@+id/likedEvents"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="32dp"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView22"></LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

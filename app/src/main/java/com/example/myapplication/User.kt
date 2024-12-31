@@ -8,7 +8,7 @@ data class User(
     val joinedEvents: MutableList<String>,
     val eventPreferences: String,
     val notificationPreference: Boolean,
-    val notifyOnUpcomingEvents: Boolean,
+    val notifyOnUpcomingEvent: Boolean,
     val notifyOnNewEvent: Boolean
 
 
