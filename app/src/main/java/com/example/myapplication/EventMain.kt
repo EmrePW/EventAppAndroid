@@ -125,7 +125,7 @@ data class Venue (
     val timezone: String,
     val city: City,
     val country: Country,
-    val address: Address,
+    val address: Address = Address(""),
     val location: Location,
     val markets: List<Genre>,
     val dmas: List<DMA>,

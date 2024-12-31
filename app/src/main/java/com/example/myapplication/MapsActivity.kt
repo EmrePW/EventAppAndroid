@@ -23,12 +23,19 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.model.Marker
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonDecoder
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.TimeZone
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-
+    private lateinit var events: MutableList<Event>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,6 +47,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        val json = Json{
+            ignoreUnknownKeys = true
+        }
+        events = json.decodeFromString(intent.getStringExtra("events") ?: "[]")
     }
 
     /**
@@ -54,26 +65,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         enableMyLocation()
-
-        // Add a marker in Sydney and move the camera
-        val BURSA = LatLng(40.1885, 29.0610)
-        val TRABZON = LatLng(41.0027, 39.7168)
         mMap.setMapColorScheme(MapColorScheme.FOLLOW_SYSTEM)
-        // zooms between 0f and 20f
-        val bursa: Marker? = mMap.addMarker(
-            MarkerOptions()
-                .position(BURSA)
-                .title("Bursa")
-                .snippet("Hello")
-        )
-
         mMap.setInfoWindowAdapter(CustomInfoWindowAdapter(this@MapsActivity))
-        bursa?.tag = EventInfo("Arts", "20.10.2024", "20:00:00")
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BURSA, 8f))
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
+        for (event in events) {
+            val marker: Marker? = mMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(event._embedded.venues[0].location.latitude.toDouble(), event._embedded.venues[0].location.longitude.toDouble()))
+                    .title(event.name)
+            )
+
+            val startZonedDateTime = ZonedDateTime.parse(event.sales.public.startDateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                .withZoneSameInstant(ZoneId.systemDefault())
+            val endZonedDateTime = ZonedDateTime.parse(event.sales.public.endDateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                .withZoneSameInstant(ZoneId.systemDefault())
+
+            marker?.tag = EventInfo("${event.classifications[0].segment.name} ${event.classifications[0].genre.name}",
+                "${startZonedDateTime.year} ${startZonedDateTime.month.name.lowercase().capitalize()} ${startZonedDateTime.dayOfMonth} through ${endZonedDateTime.year} ${endZonedDateTime.month.name.lowercase().capitalize()} ${endZonedDateTime.dayOfMonth}",
+                "${event.dates.start.localDate} ${event.dates.start.localTime}")
+        }
+
         mMap.setOnMarkerClickListener { marker ->
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(marker.position.latitude, marker.position.longitude), 10f), 2000, null)
             marker.showInfoWindow()
+
             true
         }
 
@@ -110,7 +126,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val placeInfo = p0.tag as EventInfo
 
-
             title.text = p0.title ?: "Default"
             segment.text = placeInfo.segmentGenre ?: "Default"
             sales.text = placeInfo.sales ?: "Default"
@@ -126,4 +141,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val sales: String,
         val start: String
     )
+
 }

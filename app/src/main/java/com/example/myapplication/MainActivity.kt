@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        fetchItems("$baseTicketMasterUrl&countryCode=TR&city=Erzurum")
+        fetchItems("$baseTicketMasterUrl&countryCode=TR")
 
         binding.searchEditText.addTextChangedListener{ query ->
             val myPredicate: (Event) -> Boolean = { obj -> query.toString().lowercase() in obj.name.lowercase() }
@@ -131,6 +131,17 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val intent = Intent(this, MapsActivity::class.java)
+            var eventString: String = "["
+
+            for (event in mainEventsObject) {
+                val indiviualEventString: String = Json.encodeToString(Event.serializer(), event)
+                eventString += indiviualEventString + ","
+            }
+            eventString = eventString.reversed().drop(1).reversed()
+            eventString += "]"
+
+            intent.putExtra("events", eventString)
+            startActivity(intent)
         }
     }
     override fun onStart() {
