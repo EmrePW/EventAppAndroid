@@ -100,6 +100,7 @@ class NavigationActivity : AppCompatActivity() {
                     // Hide the toolbar to maximize the navigation UI.
                     supportActionBar?.hide()
 
+
                     // Enable voice audio guidance (through the device speaker).
                     navigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE)
 
@@ -138,6 +139,8 @@ class NavigationActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (myNavigator.isGuidanceRunning) {
             myNavigator.stopGuidance();
+            myNavigator.clearDestinations()
+
         } else {
             super.onBackPressed();
         }

@@ -3,7 +3,7 @@ package com.example.myapplication
 import kotlinx.serialization.Serializable
 
 data class User(
-    val favEvents: MutableList<String>,
+    val favouriteEvents: MutableList<String>,
     val ratedEvent: MutableList<ratedEvent>,
     val joinedEvents: MutableList<String>,
     val eventPreferences: String,

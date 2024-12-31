@@ -30,12 +30,13 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
-
+// TODO: Navigate when only logged in done
+// TODO: fix join event ui update
+// TODO: bottom navbar feature only when logged in else send to login
 class EventDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventDetailsBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private var userData: User = User()
     private lateinit var thisEvent: Event
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -74,56 +75,73 @@ class EventDetailsActivity : AppCompatActivity() {
         binding.venueCountry.setText(thisEvent._embedded.venues[0].country.name)
         binding.venueAdress.setText(thisEvent._embedded.venues[0].address.line1)
 
-        binding.extendedFab.setOnClickListener{
-            val intent = Intent(this, NavigationActivity::class.java)
-            intent.putExtra("coords",
-                                    Json.encodeToString(waypoint.serializer(),
-                                        waypoint(thisEvent._embedded.venues[0].location.latitude.toDouble(),
-                                            thisEvent._embedded.venues[0].location.longitude.toDouble())))
-            startActivity(intent)
+
+        binding.extendedFab.setOnClickListener {
+            if (auth.currentUser != null) {
+                val intent = Intent(this, NavigationActivity::class.java)
+                intent.putExtra(
+                    "coords",
+                    Json.encodeToString(
+                        waypoint.serializer(),
+                        waypoint(
+                            thisEvent._embedded.venues[0].location.latitude.toDouble(),
+                            thisEvent._embedded.venues[0].location.longitude.toDouble()
+                        )
+                    )
+                )
+                startActivity(intent)
+            }
+            else {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
     override fun onStart() {
         super.onStart()
+        var userData: User = User()
         val user = auth.currentUser
         if(user != null) {
             db.collection("users").document(user.uid).get()
                 .addOnSuccessListener { document ->
                     if(document != null) {
                         userData = document.toObject<User>()!!
+                        Log.i("details1234", "user data before $userData")
                     }
                     else {
                         Log.e("FireStore", "no Such document for ${user.uid}")
                     }
+                    if(userData.favouriteEvents.contains(thisEvent.id)) {
+                        binding.iconButton.setIconResource(R.drawable.baseline_favorite_24)
+                    }
 
+                    if(userData.joinedEvents.contains(thisEvent.id)) {
+                        Log.d("Details1234", "has event")
+                        binding.button6.setText(R.string.leaveEvent)
+                    }
                 }
                 .addOnFailureListener {e ->
                     Log.d("fireStore", "get failed with ", e)
                 }
-
-            if(userData.favEvents.contains(thisEvent.id)) {
-                val favButton : MaterialButton = findViewById(R.id.iconButton)
-                favButton.setIconResource(R.drawable.baseline_favorite_24)
-
-            }
         }
         else {
             return
         }
-        // TODO : implement favourites logic, if already liked show the filled version
+        Log.i("details1234", "user data after : ${userData}")
+
         binding.iconButton.setOnClickListener{
             val favButton : MaterialButton = findViewById(R.id.iconButton)
-            if (userData.favEvents.contains(thisEvent.id)){
-                userData.favEvents.remove(thisEvent.id)
+            if (userData.favouriteEvents.contains(thisEvent.id)){
+                userData.favouriteEvents.remove(thisEvent.id)
                 favButton.setIconResource(R.drawable.outline_favorite_border_24)
             }
             else {
-                userData.favEvents.add(thisEvent.id)
+                userData.favouriteEvents.add(thisEvent.id)
                 favButton.setIconResource(R.drawable.baseline_favorite_24)
             }
             // update firestore
-            db.collection("users").document(user.uid).update("favouriteEvents", userData.favEvents)
+            db.collection("users").document(user.uid).update("favouriteEvents", userData.favouriteEvents)
         }
 
         binding.button5.setOnClickListener {
@@ -153,6 +171,11 @@ class EventDetailsActivity : AppCompatActivity() {
         }
 
         binding.button6.setOnClickListener{
+            if(auth.currentUser == null) {
+                startActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
+
             val joinEventButton: MaterialButton = findViewById<MaterialButton>(R.id.button6)
             if (userData.joinedEvents.contains(thisEvent.id)) {
                 userData.joinedEvents.remove(thisEvent.id)
@@ -165,6 +188,7 @@ class EventDetailsActivity : AppCompatActivity() {
             db.collection("users").document(user.uid).update("joinedEvents", userData.joinedEvents)
         }
     }
+
 
     private fun createReminderOnCalendar() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {

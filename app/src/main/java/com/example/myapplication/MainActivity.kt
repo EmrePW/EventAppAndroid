@@ -31,7 +31,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
-
+// TODO : fix times on cards on the recyclerview
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -124,6 +124,13 @@ class MainActivity : AppCompatActivity() {
         binding.removeFilterButton.setOnClickListener {
             adapter.updateData(mainEventsObject)
             binding.removeFilterButton.visibility = View.INVISIBLE
+        }
+
+        binding.extendedFab.setOnClickListener{
+            if(mainEventsObject == null) {
+                return@setOnClickListener
+            }
+            val intent = Intent(this, MapsActivity::class.java)
         }
     }
     override fun onStart() {
