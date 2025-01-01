@@ -62,4 +62,8 @@
     <string name="password">Password</string>
     <string name="password_again">Password Again</string>
     <string name="save_setting">Save</string>
+
+    <string name="registerSuccess">Register Successful!</string>
+
+    <string name="detailsComments">Comments and Ratings</string>
 </resources>

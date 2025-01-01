@@ -100,10 +100,9 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign up successful
-                        // TODO : redirect to homepage
                         Log.d("RegisterCheck", "createUserWithEmail:success")
                         binding.errorMessages.addView(TextView(this@RegisterActivity).apply {
-                            text = "Register successful!"
+                            text = getString(R.string.registerSuccess)
                             setTextColor(getColor(R.color.bgColor))
                             textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                         })

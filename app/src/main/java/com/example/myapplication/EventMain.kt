@@ -125,7 +125,7 @@ data class Venue (
     val timezone: String,
     val city: City,
     val country: Country,
-    val address: Address = Address(""),
+    val address: Address = Address("No address has been provided..."),
     val location: Location,
     val markets: List<Genre>,
     val dmas: List<DMA>,
@@ -191,3 +191,13 @@ data class Page (
 @Serializable
 data class waypoint(val lat: Double,
                     val long: Double)
+
+@Serializable
+data class EventRating(val uid:String, val rating: Int, val body: String){
+    constructor() : this("N/A", 2, "lorem ipsum and crazzy shit about how about this time we add things up")
+}
+
+@Serializable
+data class EventRatingList(val ratingList: MutableList<EventRating>) {
+    constructor() : this(mutableListOf(EventRating()))
+}

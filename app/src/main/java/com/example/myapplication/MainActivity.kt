@@ -36,7 +36,6 @@ import okhttp3.Response
 import java.io.File
 import java.io.IOException
 
-
 // TODO : fix times on cards on the recyclerview
 
 class MainActivity : AppCompatActivity() {
@@ -83,7 +82,6 @@ class MainActivity : AppCompatActivity() {
             val popup = PopupMenu(this, binding.filterButton )
             popup.menuInflater.inflate(R.menu.filters_menu, popup.menu)
 
-            // TODO: change segment names to ids
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                 when(menuItem.itemId) {
                     // Music
@@ -131,8 +129,6 @@ class MainActivity : AppCompatActivity() {
             // Show the popup menu.
             popup.show()
         }
-
-        // TODO : reduce opacity of outline or reduce transparency by 50%
         binding.removeFilterButton.setOnClickListener {
             adapter.updateData(mainEventsObject)
             binding.removeFilterButton.visibility = View.INVISIBLE
@@ -161,7 +157,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         Log.i("loginTest", "mainActivity onStart")
         super.onStart()
-        // TODO : fix Login alignment
         if (auth.currentUser == null) {
             Log.i("loginTest", "user is null")
             binding.loginProfileButton.setImageResource(R.drawable.updatedlogin)

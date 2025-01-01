@@ -73,8 +73,6 @@ class NavigationActivity : AppCompatActivity() {
                 301
             )
         }
-
-        // TODO(override onRequestPermissionsResults https://developers.google.com/maps/documentation/navigation/android-sdk/route)
         if (!mLocationPermissionGranted) {
             Log.e("Navigation", "Error loading Navigation SDK: The user has not granted location permission.")
             return

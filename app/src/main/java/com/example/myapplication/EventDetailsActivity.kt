@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Rating
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.util.Log
@@ -14,11 +15,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ActivityEventDetailsBinding
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
@@ -40,6 +44,7 @@ class EventDetailsActivity : AppCompatActivity() {
         binding = ActivityEventDetailsBinding.inflate(layoutInflater)
         db = Firebase.firestore
         auth = Firebase.auth
+
         setContentView(binding.root)
 
         val eventJson = intent.getStringExtra("event")!!
@@ -48,9 +53,8 @@ class EventDetailsActivity : AppCompatActivity() {
         }
 
         thisEvent = json.decodeFromString<Event>(eventJson)
-        // TODO("dynamiccaly get image")
         binding.eventTitleView.setText(thisEvent.name)
-        binding.eventLocationView.setText(thisEvent._embedded.venues[0].address.line1)
+        binding.eventLocationView.setText(if (thisEvent._embedded.venues[0].address.line1.isBlank()) "No address has been provided" else thisEvent._embedded.venues[0].address.line1)
         binding.eventSegmentView.setText(thisEvent.classifications[0].segment.name)
         binding.eventGenreView.setText(thisEvent.classifications[0].genre.name)
         binding.eventUrl.setText(thisEvent.url)
@@ -93,6 +97,38 @@ class EventDetailsActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkEvent() {
+        val eventDocRef = db.collection("events").document(thisEvent.id)
+
+        eventDocRef.get().addOnSuccessListener { document ->
+            if(!document.exists()) {
+                val eventData = hashMapOf(
+                    "comments" to emptyList<EventRating>()
+                )
+                eventDocRef.set(eventData)
+                    .addOnSuccessListener {
+                        Log.i("Firestore", "Event saved successfully")
+                    }
+                    .addOnFailureListener{ e->
+                        Log.e("Firestore", "There was a problem when creating an event: ${e.message}")
+                    }
+            }
+            else {
+                // display comments
+                val eventComments = document.toObject<EventRatingList>()!!
+                val adapter = Comment_RecyclerViewAdapter(this, eventComments.ratingList)
+                val recyclerView = binding.commentsRecyclerView
+
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
+
+        }
+        .addOnFailureListener{ e->
+            Log.e("Firestore", "There has been a problem when retrieving from Firebase: ${e.message}")
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         var userData: User = User()
@@ -122,6 +158,9 @@ class EventDetailsActivity : AppCompatActivity() {
         else {
             return
         }
+
+        checkEvent()
+
         binding.iconButton.setOnClickListener{
             val favButton : MaterialButton = findViewById(R.id.iconButton)
             if (userData.favouriteEvents.contains(thisEvent.id)){
@@ -150,8 +189,6 @@ class EventDetailsActivity : AppCompatActivity() {
                         Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    //TODO if permission is not given ask for users permission
-
                     return@with
                 }
                 // notificationId is a unique int for each notification that you must define.
