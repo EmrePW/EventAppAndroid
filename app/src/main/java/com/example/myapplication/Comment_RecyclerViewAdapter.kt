@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.RecyclerView
 
 class Comment_RecyclerViewAdapter(private val context: Context, private val items: MutableList<EventRating>) : RecyclerView.Adapter<Comment_RecyclerViewAdapter.MyViewHolder>()
@@ -24,7 +25,7 @@ class Comment_RecyclerViewAdapter(private val context: Context, private val item
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.title.text = "Some random ass user" // get username from firebase kafama eserse
+        holder.title.text = "User"// get username from firebase kafama eserse
         holder.rating.rating = items.get(position).rating.toFloat()
         holder.body.text = items.get(position).body
     }
@@ -33,4 +34,9 @@ class Comment_RecyclerViewAdapter(private val context: Context, private val item
         return items.size
     }
 
+    fun updateData(newItems: List<EventRating>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged() // Notify the adapter that the data has changed
+    }
 }

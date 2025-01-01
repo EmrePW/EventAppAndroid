@@ -434,7 +434,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="144dp"
+                android:layout_marginBottom="288dp"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="16dp"
                 app:contentPadding="4dp"
@@ -451,7 +451,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/commentAddCard"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
@@ -480,18 +480,49 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
+
                             <EditText
-                                android:id="@+id/editTextText2"
+                                android:id="@+id/commentField"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
                                 android:layout_marginEnd="16dp"
                                 android:ems="10"
                                 android:inputType="text"
-                                android:text="Name"
-                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ratingBarComment" />
+
+                            <Button
+                                android:id="@+id/submitRatingButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:text="Submit"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/commentField"
+                                app:layout_constraintTop_toBottomOf="@+id/commentField" />
+
+                            <RatingBar
+                                android:id="@+id/ratingBarComment"
+                                style="@android:style/Widget.Material.RatingBar.Indicator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:isIndicator="false"
+                                android:max="5"
+                                android:numStars="5"
+                                android:progressTint="#FFEB3B"
+                                android:rating="3"
+                                android:stepSize="1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView5" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </com.google.android.material.card.MaterialCardView>
 

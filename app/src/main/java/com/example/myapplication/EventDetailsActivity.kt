@@ -37,6 +37,9 @@ class EventDetailsActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var thisEvent: Event
+    private lateinit var eventCL: MutableList<EventRating>
+    private lateinit var adapter: Comment_RecyclerViewAdapter
+    private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -95,6 +98,21 @@ class EventDetailsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+        binding.submitRatingButton.setOnClickListener {
+            if(auth.currentUser == null) {
+                startActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
+            var rating = binding.ratingBarComment.rating.toInt()
+            var comment = binding.commentField.text.toString()
+
+            if (rating == 0) rating = 1
+
+            eventCL.add(EventRating(auth.currentUser!!.uid, rating, comment))
+            adapter.updateData(eventCL.toList())
+            db.collection("events").document(thisEvent.id).update("comments", eventCL)
+        }
     }
 
     private fun checkEvent() {
@@ -115,14 +133,15 @@ class EventDetailsActivity : AppCompatActivity() {
             }
             else {
                 // display comments
-                val eventComments = document.toObject<EventRatingList>()!!
-                val adapter = Comment_RecyclerViewAdapter(this, eventComments.ratingList)
-                val recyclerView = binding.commentsRecyclerView
+                val eventRC: EventCommentsList = document.toObject<EventCommentsList>()!!
+                adapter = Comment_RecyclerViewAdapter(this, eventRC.comments)
+                recyclerView = binding.commentsRecyclerView
+
+                eventCL = eventRC.comments
 
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(this)
             }
-
         }
         .addOnFailureListener{ e->
             Log.e("Firestore", "There has been a problem when retrieving from Firebase: ${e.message}")

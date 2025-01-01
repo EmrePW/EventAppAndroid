@@ -66,4 +66,5 @@
     <string name="registerSuccess">Register Successful!</string>
 
     <string name="detailsComments">Comments and Ratings</string>
+    <string name="user">User</string>
 </resources>

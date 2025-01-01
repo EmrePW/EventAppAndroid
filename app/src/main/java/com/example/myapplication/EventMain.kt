@@ -198,6 +198,6 @@ data class EventRating(val uid:String, val rating: Int, val body: String){
 }
 
 @Serializable
-data class EventRatingList(val ratingList: MutableList<EventRating>) {
-    constructor() : this(mutableListOf(EventRating()))
+data class EventCommentsList(val comments: MutableList<EventRating>){
+    constructor() : this(mutableListOf())
 }
