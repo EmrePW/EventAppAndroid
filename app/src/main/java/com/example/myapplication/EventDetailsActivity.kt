@@ -130,6 +130,7 @@ class EventDetailsActivity : AppCompatActivity() {
                     .addOnFailureListener{ e->
                         Log.e("Firestore", "There was a problem when creating an event: ${e.message}")
                     }
+
             }
             else {
                 // display comments
@@ -195,24 +196,6 @@ class EventDetailsActivity : AppCompatActivity() {
         }
 
         binding.button5.setOnClickListener {
-            val builder = NotificationCompat.Builder(this, getString(R.string.channelId))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("textTitle")
-                .setContentText("textContent")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true)
-
-            with(NotificationManagerCompat.from(this)) {
-                if (ActivityCompat.checkSelfPermission(
-                        this@EventDetailsActivity,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return@with
-                }
-                // notificationId is a unique int for each notification that you must define.
-                notify(696969, builder.build())
-            }
             createReminderOnCalendar()
         }
 

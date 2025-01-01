@@ -25,7 +25,7 @@ class Comment_RecyclerViewAdapter(private val context: Context, private val item
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.title.text = "User"// get username from firebase kafama eserse
+        holder.title.text = "User"
         holder.rating.rating = items.get(position).rating.toFloat()
         holder.body.text = items.get(position).body
     }

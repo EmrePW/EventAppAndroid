@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,6 +16,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.Callback
@@ -70,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
         val geohash = encodeGeohash(coords[0], coords[1], 8)
 
-        fetchItems("$baseTicketMasterUrl&countryCode=TR&size=200&sort=distance,asc&geoPoint=$geohash")
+        fetchItems("$baseTicketMasterUrl&countryCode=TR&size=200&sort=distance,asc&geoPoint=$geohash&page=3")
 
         binding.searchEditText.addTextChangedListener{ query ->
             val myPredicate: (Event) -> Boolean = { obj -> query.toString().lowercase() in obj.name.lowercase() }
@@ -165,8 +169,8 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             val user = auth.currentUser!!
+            val userData: User = User()
             checkUser(user.uid)
-            Log.i("loginTest", "mainActivity onStart ${user.uid}")
             binding.loginProfileButton.setImageResource(R.drawable.profile_photo)
             binding.loginProfileButton.setOnClickListener {
                 Log.i("loginTest", "click!")
@@ -189,7 +193,6 @@ class MainActivity : AppCompatActivity() {
                         else -> {
                             false
                         }
-
                     }
                 }
                 popup.show()
@@ -197,8 +200,96 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkUser(uid: String) {
+    private fun checkAndSendNotification(res: MutableList<Event>) {
+        Log.d("notification", "in checkAndSendNotification")
+        if(auth.currentUser == null) {
+            Log.i("MainActivitySendNotification", "There is no user")
+            return
+        }
+        Log.d("notification", "got past if")
+        var userData: User = User()
+        val userDocRef = db.collection("users").document(auth.currentUser!!.uid)
+        userDocRef.get()
+            .addOnSuccessListener { document ->
+                userData = document.toObject<User>()!!
+                Log.d("notification", "got userData successfully")
 
+                for (event in res) {
+                    Log.d("notification", "in for loop")
+                    var position = 0
+                    val eventDocRef = db.collection("events").document(event.id)
+                    eventDocRef.get()
+                        .addOnSuccessListener { eventDocument ->
+                            if(!eventDocument.exists()){
+                                val eventData = hashMapOf(
+                                    "comments" to emptyList<EventRating>()
+                                )
+                                eventDocRef.set(eventData)
+                                    .addOnSuccessListener {
+                                        Log.i("Firestore", "Event saved successfully")
+                                    }
+                                    .addOnFailureListener{ e->
+                                        Log.e("Firestore", "There was a problem when creating an event: ${e.message}")
+                                    }
+
+                                // send notification
+
+                                val intent = Intent(this@MainActivity, EventDetailsActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    putExtra("event", Json.encodeToString(Event.serializer(), res.get(position)))
+                                }
+                                val pendingIntent: PendingIntent = PendingIntent.getActivity(this@MainActivity, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+                                val builder = NotificationCompat.Builder(this@MainActivity, getString(R.string.channelId))
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle("My Application")
+                                    .setContentText("There is a new event tap this to see details")
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setAutoCancel(true)
+                                    .setContentIntent(pendingIntent)
+
+                                val segment_code = resolveEventSegment(event.classifications[0].segment.name)
+                                Log.i("notification", "$segment_code")
+
+                                if (userData.eventPreferences.contains(segment_code) && userData.notificationPreference && userData.notifyOnNewEvent)
+                                {
+                                    Log.i("notification", "ENTERED THE IF")
+                                    with(NotificationManagerCompat.from(this)) {
+                                        if (ActivityCompat.checkSelfPermission(
+                                                this@MainActivity,
+                                                Manifest.permission.POST_NOTIFICATIONS
+                                            ) != PackageManager.PERMISSION_GRANTED
+                                        ) {
+                                            return@with
+                                        }
+                                        // notificationId is a unique int for each notification that you must define.
+                                        notify(123, builder.build())
+                                    }
+                                }
+                            }
+                        }
+                    position += 1
+                }
+            }
+            .addOnFailureListener{
+                Log.e("notification","There was an error at retrieving user data")
+            }
+    }
+
+    private fun resolveEventSegment(segmentName: String): String {
+        return when(segmentName.lowercase()) {
+            "sports" -> "A"
+            "films" -> "B"
+            "arts & theatre" -> "C"
+            "music" -> "D"
+            "nonticket" -> "E"
+            "miscellaneous" -> "F"
+            else -> "N"
+        }
+
+    }
+
+    private fun checkUser(uid: String) {
         val userDocRef = db.collection("users").document(uid)
 
         userDocRef.get()
@@ -263,6 +354,8 @@ class MainActivity : AppCompatActivity() {
                             recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
                             mainEventsObject.addAll(res)
                         }
+                        Log.d("notification", "in OnResponse")
+                        checkAndSendNotification(mainEventsObject)
                     }
                 }
             }
