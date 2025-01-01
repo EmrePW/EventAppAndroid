@@ -43,12 +43,12 @@ class NavigationActivity : AppCompatActivity() {
                      Log.e("Navigator", "Navigation fragment not found with id R.id.navigation_fragment")
                  }
 
-                 myNavigator?.setTaskRemovedBehavior(Navigator.TaskRemovedBehavior.QUIT_SERVICE)
+                 myNavigator.setTaskRemovedBehavior(Navigator.TaskRemovedBehavior.QUIT_SERVICE)
 
                  val routingOptions = RoutingOptions()
                  routingOptions.travelMode(RoutingOptions.TravelMode.DRIVING)
 
-                 navigateToPlace(point, routingOptions, myNavigator);
+                 navigateToPlace(point, routingOptions, myNavigator)
              }
 
              override fun onError(e_code: Int) {
@@ -138,12 +138,12 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (myNavigator.isGuidanceRunning) {
-            myNavigator.stopGuidance();
+            myNavigator.stopGuidance()
             myNavigator.clearDestinations()
             myNavigator.cleanup()
 
         } else {
-            super.onBackPressed();
+            super.onBackPressed()
         }
     }
 

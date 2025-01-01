@@ -1,37 +1,32 @@
 package com.example.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.core.content.ContextCompat
-
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.example.myapplication.databinding.ActivityMapsBinding
-import com.google.android.gms.maps.model.MapColorScheme
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.myapplication.databinding.ActivityMapsBinding
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapColorScheme
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonDecoder
 import java.io.File
 import java.net.URI
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.TimeZone
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -54,7 +49,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val fileUri = intent.getStringExtra("events")
         val fileContent = File(URI(fileUri)).readText()
-        events = Json.decodeFromString(fileContent)
+        events = json.decodeFromString(fileContent)
     }
 
     /**
