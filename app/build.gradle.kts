@@ -73,6 +73,8 @@ dependencies {
 
     // implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.android.libraries.navigation:navigation:6.0.0")
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
+
 
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-functions")
@@ -83,6 +85,7 @@ dependencies {
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
+
     //facebook login
     implementation("com.facebook.android:facebook-android-sdk:17.0.2")
 
@@ -90,6 +93,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
 
 
     // Add the dependencies for any other desired Firebase products

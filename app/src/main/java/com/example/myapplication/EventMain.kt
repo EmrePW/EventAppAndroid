@@ -35,7 +35,7 @@ data class Event (
 data class Classification (
     val primary: Boolean,
     val segment: Genre,
-    val genre: Genre,
+    val genre: Genre = Genre("" , ""),
     val family: Boolean
 )
 
@@ -90,7 +90,7 @@ data class Attraction (
 
 @Serializable
 data class Image (
-    val ratio: String,
+    val ratio: String = "16_9",
     val url: String,
     val width: Long,
     val height: Long,

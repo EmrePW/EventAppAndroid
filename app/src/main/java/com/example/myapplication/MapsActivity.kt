@@ -25,6 +25,8 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.model.Marker
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonDecoder
+import java.io.File
+import java.net.URI
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -50,7 +52,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val json = Json{
             ignoreUnknownKeys = true
         }
-        events = json.decodeFromString(intent.getStringExtra("events") ?: "[]")
+        val fileUri = intent.getStringExtra("events")
+        val fileContent = File(URI(fileUri)).readText()
+        events = Json.decodeFromString(fileContent)
     }
 
     /**

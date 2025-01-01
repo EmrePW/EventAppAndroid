@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name" translatable="false">My Application</string>
     <string name="web_client_ID" translatable="false">1079978725212-a42ha36qd46b7g85b8tgjof09jm7vejr.apps.googleusercontent.com</string>
 
     <string name="facebook_app_id" translatable="false">2021838118290592</string>
@@ -31,11 +31,11 @@
     <string name="addReminder">Set a reminder</string>
     <string name="removeReminder">Remove the reminder</string>
     <string name="joinEvent">Join this event</string>
-    <string name="leaveEvent">Fuck I am too busy</string>
+    <string name="leaveEvent">Leave this event</string>
 
-    <string name="channel_name">MyChannel</string>
-    <string name="channel_description"></string>
-    <string name="channelId">MyNotChannel</string>
+    <string name="channel_name" translatable="false">MyChannel</string>
+    <string name="channel_description" translatable="false">Default</string>
+    <string name="channelId" translatable="false">MyNotChannel</string>
 
     <string name="notificationSettings">Notifications</string>
     <string name="profileSettings">Profile</string>
@@ -48,4 +48,18 @@
     <string name="upcomingEventNotification">I want to receive notifications about upcoming events</string>
     <string name="newEventsNotifications">I want to receive an update when there is new event in my interests</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <string name="navigateToEvent">Navigate</string>
+    <string name="eventStartsAt">Event starts at : </string>
+    <string name="eventSales">On Sale through : </string>
+    <string name="eventWebsite">Event site</string>
+    <string name="venueDetails">Venue Details</string>
+    <string name="eventDetails">Details</string>
+
+    <string name="mainFabText">See events on the map</string>
+    <string name="clearFilters">Clear Filters</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="password_again">Password Again</string>
+    <string name="save_setting">Save</string>
 </resources>

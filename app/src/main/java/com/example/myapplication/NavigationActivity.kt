@@ -140,9 +140,15 @@ class NavigationActivity : AppCompatActivity() {
         if (myNavigator.isGuidanceRunning) {
             myNavigator.stopGuidance();
             myNavigator.clearDestinations()
+            myNavigator.cleanup()
 
         } else {
             super.onBackPressed();
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myNavigator.cleanup()
     }
+}
