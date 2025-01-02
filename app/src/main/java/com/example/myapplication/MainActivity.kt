@@ -44,10 +44,8 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val ticketMasterAPIKey: String = "NEt1CpT1sA2eQDgr5a0OXJA7nWxNc9M4"
+    private val ticketMasterAPIKey: String = BuildConfig.TICKETMASTER_API_KEY
     private val baseTicketMasterUrl: String = "https://app.ticketmaster.com/discovery/v2/events?apikey=${ticketMasterAPIKey}"
-    //private val testUrl: String = "https://jsonplaceholder.typicode.com/posts"
-    //private lateinit var myTestObjects: MutableList<TestObject>
     private lateinit var mainEventsObject: MutableList<Event>
     private lateinit var recyclerView: RecyclerView
     private var adapter: EventMain_RecyclerViewAdapter = EventMain_RecyclerViewAdapter(this@MainActivity, mutableListOf()){pos -> pos}
@@ -74,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         val geohash = encodeGeohash(coords[0], coords[1], 8)
 
-        fetchItems("$baseTicketMasterUrl&countryCode=TR&size=200&sort=distance,asc&geoPoint=$geohash&page=3")
+        fetchItems("$baseTicketMasterUrl&countryCode=TR&size=200&sort=distance,asc&geoPoint=$geohash")
 
         binding.searchEditText.addTextChangedListener{ query ->
             val myPredicate: (Event) -> Boolean = { obj -> query.toString().lowercase() in obj.name.lowercase() }
