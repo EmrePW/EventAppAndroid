@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private val ticketMasterAPIKey: String = "NEt1CpT1sA2eQDgr5a0OXJA7nWxNc9M4"
+    private val ticketMasterAPIKey: String = BuildConfig.TICKETMASTER_API_KEY
     private val baseTicketMasterUrl: String = "https://app.ticketmaster.com/discovery/v2/events/"
 
     private val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")

@@ -103,12 +103,12 @@ class NavigationActivity : AppCompatActivity() {
                     navigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE)
 
                     // Simulate vehicle progress along the route for demo/debug builds.
-
-                    Log.d("Navigator", "DEBUG MODE ACTIVE")
-                    navigator.simulator.simulateLocationsAlongExistingRoute(
-                        SimulationOptions().speedMultiplier(10f)
-                    )
-
+                    if(BuildConfig.DEBUG) {
+                        Log.d("Navigator", "DEBUG MODE ACTIVE")
+                        navigator.simulator.simulateLocationsAlongExistingRoute(
+                            SimulationOptions().speedMultiplier(10f)
+                        )
+                    }
 
                     // Start turn-by-turn guidance along the current route.
                     navigator.startGuidance()

@@ -199,12 +199,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAndSendNotification(res: MutableList<Event>) {
-        Log.d("notification", "in checkAndSendNotification")
         if(auth.currentUser == null) {
             Log.i("MainActivitySendNotification", "There is no user")
             return
         }
-        Log.d("notification", "got past if")
         var userData: User = User()
         val userDocRef = db.collection("users").document(auth.currentUser!!.uid)
         userDocRef.get()
@@ -213,7 +211,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d("notification", "got userData successfully")
 
                 for (event in res) {
-                    Log.d("notification", "in for loop")
                     var position = 0
                     val eventDocRef = db.collection("events").document(event.id)
                     eventDocRef.get()
@@ -297,7 +294,7 @@ class MainActivity : AppCompatActivity() {
                         "favouriteEvents" to emptyList<String>(),
                         "ratedEvents" to emptyList<ratedEvent>(),
                         "joinedEvents" to emptyList<String>(),
-                        "eventPreferences" to "",
+                        "eventPreferences" to "NNNNNN",
                         "notificationPreference" to true,
                         "notifyOnUpcomingEvent" to true,
                         "notifyOnNewEvent" to true
