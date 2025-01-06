@@ -92,6 +92,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(39.9334, 32.8597), 5f))
+
+
     }
 
     private fun enableMyLocation() {

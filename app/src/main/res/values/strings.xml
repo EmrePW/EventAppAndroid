@@ -67,4 +67,6 @@
 
     <string name="detailsComments">Comments and Ratings</string>
     <string name="user">User</string>
+
+    <string name="forgotPasswordActivity">Forgot Password</string>
 </resources>

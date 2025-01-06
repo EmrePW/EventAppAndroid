@@ -424,7 +424,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingBottom="16dp">
 
                     <ImageView
                         android:id="@+id/imageView6"
@@ -447,20 +448,19 @@
                         app:layout_constraintStart_toStartOf="@+id/imageView6"
                         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
-                    <LinearLayout
-                        android:id="@+id/likedEvents"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/favEventsRecycler"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="32dp"
-                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView22"></LinearLayout>
+                        app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

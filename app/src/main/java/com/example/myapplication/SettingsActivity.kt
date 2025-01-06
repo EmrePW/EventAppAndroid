@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivitySettingsBinding
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.Firebase
@@ -63,7 +65,7 @@ class SettingsActivity : AppCompatActivity() {
         //favourites
         binding.cardView6.setOnClickListener{
             Log.i("settingsActivity", "likedClick!")
-            binding.likedEvents.visibility = if (binding.likedEvents.visibility == View.GONE) View.VISIBLE else View.GONE
+            binding.favEventsRecycler.visibility = if (binding.favEventsRecycler.visibility == View.GONE) View.VISIBLE else View.GONE
         }
 
         // change email if google no change
@@ -230,14 +232,14 @@ class SettingsActivity : AppCompatActivity() {
                                     ignoreUnknownKeys = true
                                 }
                                 val res: Event = json.decodeFromString<Event>(response.body!!.string())
-                                val eventView: TextView = TextView(this@SettingsActivity).apply {
-                                    setTextColor(getColor(R.color.textColorPrimary))
-                                    textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                                    setText("${res.name} ${res.dates.start.localDate}")
-                                    setTextSize(18f)
-                                }
                                 runOnUiThread{
-                                    binding.likedEvents.addView(eventView)
+                                    binding.favEventsRecycler.adapter = LikedEvent_RecyclerViewAdapter(this@SettingsActivity, mutableListOf(res)){
+                                        pos ->
+                                        val intent = Intent(this@SettingsActivity, EventDetailsActivity::class.java)
+                                        intent.putExtra("event", json.encodeToString(Event.serializer(), res))
+                                        startActivity(intent)
+                                    }
+                                    binding.favEventsRecycler.layoutManager = LinearLayoutManager(this@SettingsActivity)
                                 }
 
                             }

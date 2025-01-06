@@ -9,6 +9,7 @@ import android.media.Rating
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -182,6 +183,11 @@ class EventDetailsActivity : AppCompatActivity() {
         checkEvent()
 
         binding.iconButton.setOnClickListener{
+            if(auth.currentUser == null) {
+                Toast.makeText(this, "Please log in first!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
             val favButton : MaterialButton = findViewById(R.id.iconButton)
             if (userData.favouriteEvents.contains(thisEvent.id)){
                 userData.favouriteEvents.remove(thisEvent.id)
@@ -230,7 +236,9 @@ class EventDetailsActivity : AppCompatActivity() {
         else {
             val cr: ContentResolver = this.contentResolver
             val values = ContentValues()
-            val startMillis = System.currentTimeMillis() + 1860 * 1000 // Example: 1 hour from now
+
+            val startMillis = ZonedDateTime.parse(thisEvent.dates.start.dateTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                .withZoneSameInstant(ZoneId.systemDefault()).toEpochSecond() * 1000
             val endMillis = startMillis + 1860 * 1000 // 1-hour duration
 
             values.put(CalendarContract.Events.DTSTART, startMillis)

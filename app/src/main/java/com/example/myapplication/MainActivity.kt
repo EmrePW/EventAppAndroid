@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.extendedFab.setOnClickListener{
-            if(mainEventsObject == null) {
+            if(mainEventsObject.size == 0) {
                 return@setOnClickListener
             }
             val intent = Intent(this, MapsActivity::class.java)

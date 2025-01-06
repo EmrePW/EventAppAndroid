@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -78,14 +79,15 @@ class LoginActivity : AppCompatActivity() {
 
         // Forgot Password
         binding.forgotPasswordButton.setOnClickListener{
-            Log.i("FP", "click!")
-            val currentUser = auth.currentUser ?: throw Exception("currentUser is null in forgot Password!")
-            val userEmail = currentUser.email.toString()
-            Log.i("FP", userEmail)
-
-            auth.sendPasswordResetEmail(userEmail).addOnCompleteListener{ task ->
-                if (task.isSuccessful) Log.d("FP", "Email sent.")
+            if(auth.currentUser != null) {
+                Toast.makeText(this, "Please log in first!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+            startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
+
+//            auth.sendPasswordResetEmail(userEmail).addOnCompleteListener{ task ->
+//                if (task.isSuccessful) Log.d("FP", "Email sent.")
+//            }
         }
 
         // Sign in with google
