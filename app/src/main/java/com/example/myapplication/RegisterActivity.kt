@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -107,6 +108,7 @@ class RegisterActivity : AppCompatActivity() {
                             textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                         })
                         val user = auth.currentUser
+                        startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("RegisterCheck", "createUserWithEmail:failure", task.exception)

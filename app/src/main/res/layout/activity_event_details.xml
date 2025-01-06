@@ -74,7 +74,7 @@
                 app:layout_constraintHeight_percent="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/monika" />
+                app:srcCompat="@drawable/bftb" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/iconButton"

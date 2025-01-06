@@ -70,46 +70,56 @@ class SettingsActivity : AppCompatActivity() {
 
         // change email if google no change
         binding.button2.setOnClickListener{
-            val newEmail: EditText = binding.changeEmailEditText
+            val newEmail: String = binding.changeEmailEditText.text.toString()
 
-            if(newEmail.text.isNullOrBlank()){
+
+            if(newEmail.isBlank()){
                 binding.errorContainer.removeAllViews()
                 val error: TextView = TextView(this).apply {
                     setTextColor(getColor(R.color.fieldError))
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                     text = "Please fill out the field!"
                 }
+                runOnUiThread {
+
                 binding.errorContainer.addView(error)
                 binding.changeEmailEditText.text.clear()
+                }
+                Log.i("email", "BLANK")
                 return@setOnClickListener
             }
 
-            if (!newEmail.text.matches(emailRegex)) {
+            if (!newEmail.matches(emailRegex)) {
                 binding.errorContainer.removeAllViews()
                 val error: TextView = TextView(this).apply {
                     setTextColor(getColor(R.color.fieldError))
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                     text = "Please provide a valid email!"
                 }
-                binding.errorContainer.addView(error)
-                binding.changeEmailEditText.text.clear()
+                runOnUiThread {
+                    binding.errorContainer.addView(error)
+                    binding.changeEmailEditText.text.clear()
+                }
+                Log.i("email", "MATCHES")
+
+
                 return@setOnClickListener
             }
 
-            auth.currentUser!!.updateEmail("user@example.com")
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("Settings", "User email address updated.")
-                        binding.errorContainer.removeAllViews()
-                        val success: TextView = TextView(this).apply {
-                            setTextColor(getColor(R.color.textColorPrimary))
-                            textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                            text = "Email change successful!"
-                        }
-                        binding.errorContainer.addView(success)
-
+            auth.currentUser!!.verifyBeforeUpdateEmail(newEmail).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val success: TextView = TextView(this).apply {
+                        setTextColor(getColor(R.color.textColorPrimary))
+                        textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                        text = "Email change successful!"
                     }
+                    runOnUiThread {
+                        binding.errorContainer.addView(success)
+                        binding.changeEmailEditText.text.clear()
+                    }
+                    Log.d("Settings", "User email address updated.")
                 }
+            }
         }
 
         // change password if google do not permit
@@ -123,8 +133,11 @@ class SettingsActivity : AppCompatActivity() {
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                     text = "Please fill out the field!"
                 }
+                runOnUiThread {
                 binding.errorContainer.addView(error)
                 binding.editTextText.text.clear()
+
+                }
                 return@setOnClickListener
             }
 
@@ -135,8 +148,11 @@ class SettingsActivity : AppCompatActivity() {
                     textAlignment = TextView.TEXT_ALIGNMENT_CENTER
                     text = "Password must include at least 8 characters and an uppercase letter."
                 }
+                runOnUiThread {
+
                 binding.errorContainer.addView(error)
                 binding.editTextText.text.clear()
+                }
                 return@setOnClickListener
             }
 
@@ -151,6 +167,7 @@ class SettingsActivity : AppCompatActivity() {
                             text = "Password change successful!"
                         }
                         binding.errorContainer.addView(success)
+                        binding.editTextText.text.clear()
                     }
                 }
         }
