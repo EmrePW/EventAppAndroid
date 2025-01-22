@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">My Application</string>
-    <string name="web_client_ID" translatable="false">1079978725212-a42ha36qd46b7g85b8tgjof09jm7vejr.apps.googleusercontent.com</string>
 
-    <string name="facebook_app_id" translatable="false">2021838118290592</string>
-    <string name="facebook_client_token" translatable="false">1e8864f46ab8d2c4a23e06634a7e1dc8</string>
     <string name="app_label" translatable="false">SchoolMobileApp</string>
     <string name="search_hint">Search Events</string>
     <string name="login">Login to Your Account</string>

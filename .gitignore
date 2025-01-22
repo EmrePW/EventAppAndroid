@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /local.properties
+./secrets.properties
 ./.idea/caches
 ./.idea/libraries
 ./.idea/modules.xml
@@ -12,5 +13,14 @@
 /captures
 .externalNativeBuild
 .cxx
-./local.properties
-./secrets.properties
+*.pro
+/app/google-services.json
+
+*.apk
+*.dex
+*.tmp
+*.log
+hs_err_pid*
+replay_pid*
+
+!gradle/libs.versions.toml

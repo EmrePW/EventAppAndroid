@@ -95,10 +95,8 @@ class LoginActivity : AppCompatActivity() {
         binding.googleSignInButton.setOnClickListener {
             Log.i("Google5", "Entered Function!")
             val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(true)
-                .setServerClientId(getString(R.string.web_client_ID))
+                .setServerClientId(BuildConfig.FIREBASE_WEB_CLIENT_ID)
                 .setFilterByAuthorizedAccounts(false)
-                //.setAutoSelectEnabled(true)
                 .build()
 
             val request: GetCredentialRequest = GetCredentialRequest.Builder()
